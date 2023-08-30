@@ -1,0 +1,40 @@
+.app-layout {
+  display: flex;
+  height: 100vh;
+  background-image: url("./components/b.webp");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.sidebar {
+  width: 20%;
+  background: rgba(245, 245, 245, 0.8);
+  padding: 20px;
+  height: 100%;
+  overflow: auto;
+}
+
+.sidebar ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.sidebar ul li {
+  margin-bottom: 15px;
+}
+
+.sidebar ul li a {
+  text-decoration: underline;
+  /* Add underline to the links */
+  color: #008000;
+  /* Change the text color to green (#008000) */
+}
+
+.content {
+  flex: 1;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.8);
+  height: 100%;
+  overflow: auto;
+}

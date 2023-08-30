@@ -1,0 +1,39 @@
+.grade-page {
+    background-color: #f5f5f5;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.grade-form {
+    border: 1px solid #ccc;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.grade-form h2 {
+    color: #333;
+    text-align: center;
+}
+
+.grade-form table {
+    width: 100%;
+    text-align: center;
+}
+
+.grade-form th {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.grade-form td {
+    background-color: #f8f9fa;
+}
+
+.grade-form .form-control {
+    max-width: 80px;
+}
+
+.grade-button {
+    float: right;
+    margin-top: 10px;
+}
