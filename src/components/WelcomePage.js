@@ -88,6 +88,9 @@ function WelcomePage() {
             </div>
           ))}
         </div>
+        <div className="team-averages">
+          Total Enlisted Players: {enlistedPlayers.length}
+        </div>
       </div>
       <div className="welcome-section">
         <h2>Teams and Averages</h2>
