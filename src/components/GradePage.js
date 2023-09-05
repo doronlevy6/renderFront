@@ -122,7 +122,10 @@ const initialGrading = usernamesResponse.data.usernames
       <Row className="justify-content-md-center">
         <Col xs lg="12">
           <div className="grade-form">
-            <h2>{user.username}: your grades are shown here 🏀</h2>
+            <h2> {user.username}  🏀 your grades are shown here 🏀</h2>
+            <p>Enter a number between 1 and 10 or use the arrow keys.
+
+Only players with a valid grade will be submitted</p>
             <Table striped bordered hover>
               <thead>
                 <tr>
@@ -203,6 +206,12 @@ const initialGrading = usernamesResponse.data.usernames
                 ))}
               </tbody>
             </Table>
+            </div>
+      </Col>
+    </Row>
+
+    <Row className="justify-content-md-center mt-4">
+      <Col xs lg="12">
             <Button
               className="grade-button"
               variant="primary"
@@ -219,7 +228,7 @@ const initialGrading = usernamesResponse.data.usernames
     <p><strong>ריבאונד (rebound skills):</strong> היכולת לקחת ריבאונד בהתקפה ובהגנה.</p>
 </div>
 
-          </div>
+          
         </Col>
       </Row>
     </Container>
