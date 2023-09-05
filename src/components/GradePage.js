@@ -20,11 +20,11 @@ function GradePage() {
         try {
           // Fetch all usernames
           const usernamesResponse = await axios.get(
-            "http://renderbbserver.onrender.com/usernames"
+            "https://renderbbserver.onrender.com/usernames"
           );
           // Fetch all rankings given by the logged-in user
           const rankingsResponse = await axios.get(
-            `http://renderbbserver.onrender.com/rankings/${user.username}`
+            `https://renderbbserver.onrender.com/rankings/${user.username}`
           );
 
           if (usernamesResponse.data.success && rankingsResponse.data.success) {
@@ -90,7 +90,7 @@ const initialGrading = usernamesResponse.data.usernames
     try {
       
       
-      const response = await axios.post("http://renderbbserver.onrender.com/rankings", {
+      const response = await axios.post("https://renderbbserver.onrender.com/rankings", {
         rater_username: user.username,
         rankings: grading,
       });

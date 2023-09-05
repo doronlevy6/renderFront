@@ -16,12 +16,12 @@ function WelcomePage() {
 
   const fetchData = async () => {
     try {
-      const enlistResponse = await axios.get("http://renderbbserver.onrender.com/enlist");
+      const enlistResponse = await axios.get("https://renderbbserver.onrender.com/enlist");
       if (enlistResponse.data.success) {
         setEnlistedPlayers(enlistResponse.data.usernames);
       }
 
-      const teamsResponse = await axios.get("http://renderbbserver.onrender.com/get-teams");
+      const teamsResponse = await axios.get("https://renderbbserver.onrender.com/get-teams");
 
       if (teamsResponse.data.success) {
         setTeams(teamsResponse.data.teams);
@@ -46,7 +46,7 @@ function WelcomePage() {
   const enlistForGame = async () => {
     try {
       const usernames = [user.username];
-      const response = await axios.post("http://renderbbserver.onrender.com/enlist-users", {
+      const response = await axios.post("https://renderbbserver.onrender.com/enlist-users", {
         usernames: usernames,
       });
       if (response.data.success) {
@@ -59,7 +59,7 @@ function WelcomePage() {
     }
   };
   useEffect(() => {
-    const socket = io("http://renderbbserver.onrender.com");
+    const socket = io("https://renderbbserver.onrender.com");
 
     socket.on("teamsUpdated", () => {
       fetchData();
