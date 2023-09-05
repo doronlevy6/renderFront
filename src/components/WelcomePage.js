@@ -16,16 +16,12 @@ function WelcomePage() {
 
   const fetchData = async () => {
     try {
-      const enlistResponse = await axios.get(
-        "https://renderbbserver.onrender.com/enlist"
-      );
+      const enlistResponse = await axios.get("http://renderbbserver.onrender.com/enlist");
       if (enlistResponse.data.success) {
         setEnlistedPlayers(enlistResponse.data.usernames);
       }
 
-      const teamsResponse = await axios.get(
-        "https://renderbbserver.onrender.com/get-teams"
-      );
+      const teamsResponse = await axios.get("http://renderbbserver.onrender.com/get-teams");
 
       if (teamsResponse.data.success) {
         setTeams(teamsResponse.data.teams);
@@ -50,12 +46,9 @@ function WelcomePage() {
   const enlistForGame = async () => {
     try {
       const usernames = [user.username];
-      const response = await axios.post(
-        "https://renderbbserver.onrender.com/enlist-users",
-        {
-          usernames: usernames,
-        }
-      );
+      const response = await axios.post("http://renderbbserver.onrender.com/enlist-users", {
+        usernames: usernames,
+      });
       if (response.data.success) {
         alert("You have been enlisted for the next game!");
         fetchData(); // Refresh enlisted players after enlisting
@@ -66,7 +59,7 @@ function WelcomePage() {
     }
   };
   useEffect(() => {
-    const socket = io("https://renderbbserver.onrender.com");
+    const socket = io("http://renderbbserver.onrender.com");
 
     socket.on("teamsUpdated", () => {
       fetchData();
@@ -89,9 +82,10 @@ function WelcomePage() {
           ))}
         </div>
         <div className="team-averages">
-          Total Enlisted Players: {enlistedPlayers.length}
+          Players: {enlistedPlayers.length}
         </div>
       </div>
+     
       <div className="welcome-section">
         <h2>Teams and Averages</h2>
         {Array.isArray(teams) && teams.length > 0 ? (
@@ -124,13 +118,13 @@ function WelcomePage() {
                   )}
                 </div>
                 <div>
-                  <h3>Averages:</h3>
-                  <p>Skill Level: {averages.skill_level}</p>
-                  <p>Scoring Ability: {averages.scoring_ability}</p>
-                  <p>Defensive Skills: {averages.defensive_skills}</p>
-                  <p>Speed and Agility: {averages.speed_and_agility}</p>
-                  <p>Shooting Range: {averages.shooting_range}</p>
-                  <p>Rebound Skills: {averages.rebound_skills}</p>
+                <h3>Averages:</h3>
+<p>Playmaker: {averages.skill_level.toFixed(2)}</p>
+<p>Scoring Ability: {averages.scoring_ability.toFixed(2)}</p>
+<p>Defensive Skills: {averages.defensive_skills.toFixed(2)}</p>
+<p>Speed and Agility: {averages.speed_and_agility.toFixed(2)}</p>
+<p>3 pt Shooting: {averages.shooting_range.toFixed(2)}</p>
+<p>Rebound Skills: {averages.rebound_skills.toFixed(2)}</p>
                 </div>
               </div>
             );

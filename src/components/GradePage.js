@@ -20,11 +20,11 @@ function GradePage() {
         try {
           // Fetch all usernames
           const usernamesResponse = await axios.get(
-            "https://renderbbserver.onrender.com/usernames"
+            "http://renderbbserver.onrender.com/usernames"
           );
           // Fetch all rankings given by the logged-in user
           const rankingsResponse = await axios.get(
-            `https://renderbbserver.onrender.com/rankings/${user.username}`
+            `http://renderbbserver.onrender.com/rankings/${user.username}`
           );
 
           if (usernamesResponse.data.success && rankingsResponse.data.success) {
@@ -34,33 +34,46 @@ function GradePage() {
               rankingsByUser[ranking.rated_username] = ranking;
             });
 
-            // Prepare the initial grading data, considering all the usernames
-            const initialGrading = usernamesResponse.data.usernames.map(
-              (username) => {
-                const ranking = rankingsByUser[username];
-                if (ranking) {
-                  return {
-                    username: ranking.rated_username,
-                    skillLevel: ranking.skill_level,
-                    scoringAbility: ranking.scoring_ability,
-                    defensiveSkills: ranking.defensive_skills,
-                    speedAndAgility: ranking.speed_and_agility,
-                    shootingRange: ranking.shooting_range,
-                    reboundSkills: ranking.rebound_skills,
-                  };
-                } else {
-                  return {
-                    username: username,
-                    skillLevel: "3",
-                    scoringAbility: "3",
-                    defensiveSkills: "3",
-                    speedAndAgility: "3",
-                    shootingRange: "3",
-                    reboundSkills: "3",
-                  };
-                }
-              }
-            );
+// Prepare the initial grading data, considering all the usernames
+const initialGrading = usernamesResponse.data.usernames
+  .filter(username => {
+    // Only "doron" can see players starting with "joker"
+    if (username.startsWith("joker") && user.username !== "doron") return false;
+    
+    // If the current user is "doron" or "moshe", they can rank themselves
+    if ((username === "doron" || username === "Moshe") && user.username === username) return true;
+    
+    // Other users cannot rank themselves
+    if (username === user.username) return false;
+    
+    return true;
+  })
+  .map((username) => {
+    const ranking = rankingsByUser[username];
+    if (ranking) {
+      return {
+        username: ranking.rated_username,
+        skillLevel: ranking.skill_level,
+        scoringAbility: ranking.scoring_ability,
+        defensiveSkills: ranking.defensive_skills,
+        speedAndAgility: ranking.speed_and_agility,
+        shootingRange: ranking.shooting_range,
+        reboundSkills: ranking.rebound_skills,
+      };
+    } else {
+      return {
+        username: username,
+        skillLevel: "",
+        scoringAbility: "",
+        defensiveSkills: "",
+        speedAndAgility: "",
+        shootingRange: "",
+        reboundSkills: "",
+      };
+    }
+  });
+
+
 
             setGrading(initialGrading);
           }
@@ -75,13 +88,12 @@ function GradePage() {
 
   const submitGrading = async () => {
     try {
-      const response = await axios.post(
-        "https://renderbbserver.onrender.com/rankings",
-        {
-          rater_username: user.username,
-          rankings: grading,
-        }
-      );
+      
+      
+      const response = await axios.post("http://renderbbserver.onrender.com/rankings", {
+        rater_username: user.username,
+        rankings: grading,
+      });
       if (response.data.success) {
         alert("Successfully submitted grading!");
       } else {
@@ -115,11 +127,11 @@ function GradePage() {
               <thead>
                 <tr>
                   <th>Username</th>
-                  <th>Skill Level</th>
+                  <th>Playmaker </th>
                   <th>Scoring Ability</th>
                   <th>Defensive Skills</th>
                   <th>Speed and Agility</th>
-                  <th>Shooting Range</th>
+                  <th>3 pt Shooting </th>
                   <th>Rebound Skills</th>
                 </tr>
               </thead>
@@ -132,11 +144,9 @@ function GradePage() {
                         type="number"
                         min="0"
                         max="10"
-                        value={player.skillLevel}
-                        onChange={handleInputChange(
-                          player.username,
-                          "skillLevel"
-                        )}
+                        value={player.skillLevel || ""}
+                        placeholder="🙄"
+                        onChange={handleInputChange(player.username, "skillLevel")}
                       />
                     </td>
                     <td>
@@ -144,11 +154,9 @@ function GradePage() {
                         type="number"
                         min="0"
                         max="10"
-                        value={player.scoringAbility}
-                        onChange={handleInputChange(
-                          player.username,
-                          "scoringAbility"
-                        )}
+                        value={player.scoringAbility || ""}
+                        placeholder="🙄"
+                        onChange={handleInputChange(player.username, "scoringAbility")}
                       />
                     </td>
                     <td>
@@ -156,11 +164,9 @@ function GradePage() {
                         type="number"
                         min="0"
                         max="10"
-                        value={player.defensiveSkills}
-                        onChange={handleInputChange(
-                          player.username,
-                          "defensiveSkills"
-                        )}
+                        value={player.defensiveSkills || ""}
+                        placeholder="🙄"
+                        onChange={handleInputChange(player.username, "defensiveSkills")}
                       />
                     </td>
                     <td>
@@ -168,11 +174,9 @@ function GradePage() {
                         type="number"
                         min="0"
                         max="10"
-                        value={player.speedAndAgility}
-                        onChange={handleInputChange(
-                          player.username,
-                          "speedAndAgility"
-                        )}
+                        value={player.speedAndAgility || ""}
+                        placeholder="🙄"
+                        onChange={handleInputChange(player.username, "speedAndAgility")}
                       />
                     </td>
                     <td>
@@ -180,11 +184,9 @@ function GradePage() {
                         type="number"
                         min="0"
                         max="10"
-                        value={player.shootingRange}
-                        onChange={handleInputChange(
-                          player.username,
-                          "shootingRange"
-                        )}
+                        value={player.shootingRange || ""}
+                        placeholder="🙄"
+                        onChange={handleInputChange(player.username, "shootingRange")}
                       />
                     </td>
                     <td>
@@ -192,11 +194,9 @@ function GradePage() {
                         type="number"
                         min="0"
                         max="10"
-                        value={player.reboundSkills}
-                        onChange={handleInputChange(
-                          player.username,
-                          "reboundSkills"
-                        )}
+                        value={player.reboundSkills || ""}
+                        placeholder="🙄"
+                        onChange={handleInputChange(player.username, "reboundSkills")}
                       />
                     </td>
                   </tr>
@@ -210,12 +210,21 @@ function GradePage() {
             >
               Submit
             </Button>
+            <div className="mt-3">
+    <p><strong>רכז (playmaker):</strong> שחקן שטוב ביצירת הזדמנויות קליעה לעצמו או לחבריו לקבוצה, לרוב באמצעות מסירה או כדרור.</p>
+    <p><strong>יכולת קליעה (scoring ability):</strong> היכולת לקלוע סל באופן כללי מכל עמדות על המגרש, באמצעות מגוון של תנועות התקפיות.</p>
+    <p><strong>מיומנויות הגנה (defensive skills):</strong> היכולת למנוע מהיריב לקלוע, באמצעות טכניקות כגון חסימת זריקות, חטיפה של הכדור, ועמידה טובה במקום.</p>
+    <p><strong>מהירות וזריזות (speed and agility):</strong> היכולת לנוע מהר ולשנות כיוון בקלות, דבר המסייע גם במצבים ההתקפיים וגם במצבים ההגנתיים.</p>
+    <p><strong>קליעה לשלוש (3 pt shooting):</strong> היכולת לקלוע מעבר לקשת השלוש.</p>
+    <p><strong>ריבאונד (rebound skills):</strong> היכולת לקחת ריבאונד בהתקפה ובהגנה.</p>
+</div>
+
           </div>
         </Col>
       </Row>
     </Container>
   );
-}
+                }
 
 export default GradePage;
 

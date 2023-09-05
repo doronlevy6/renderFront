@@ -1,39 +1,89 @@
-.grade-page {
-    background-color: #f5f5f5;
+.welcome-page {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+}
+
+.welcome-section {
     padding: 20px;
-    border-radius: 10px;
+    margin: 20px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.grade-form {
-    border: 1px solid #ccc;
-    padding: 20px;
-    border-radius: 10px;
+.welcome-section h2,
+.welcome-section h3,
+.welcome-section p {
+    color: #4caf50;
 }
 
-.grade-form h2 {
-    color: #333;
+.welcome-section h2 {
     text-align: center;
+    margin-bottom: 10px;
 }
 
-.grade-form table {
-    width: 100%;
-    text-align: center;
+.welcome-section table {
+    border-collapse: collapse;
+    width: fit-content;
 }
 
-.grade-form th {
-    background-color: #007bff;
-    color: #fff;
+.welcome-section th,
+.welcome-section td {
+    padding: 8px;
+    border: 1px solid #ddd;
+    text-align: left;
+    background-color: rgba(255, 165, 0, 0.1);
+    white-space: nowrap;
 }
 
-.grade-form td {
-    background-color: #f8f9fa;
+.welcome-section th {
+    width: 1%;
 }
 
-.grade-form .form-control {
-    max-width: 80px;
+.welcome-section tr:nth-child(even) {
+    background-color: #f2f2f2;
 }
 
-.grade-button {
-    float: right;
-    margin-top: 10px;
+.team-averages {
+    display: flex;
+    flex-direction: row;
+    color: #4caf50;
+    font-weight: bold;
 }
+
+.team-averages div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 48%;
+    background-color: rgba(255, 165, 0, 0.1);
+    padding: 10px;
+    border-radius: 4px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.team-averages p {
+    margin: 4px;
+    white-space: nowrap;
+}
+
+.usernames-list {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    background-color: rgba(255, 165, 0, 0.1);
+    padding: 10px;
+    border-radius: 4px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.username-item {
+    padding: 8px;
+    background-color: rgba(255, 165, 0, 0.1);
+    border-radius: 4px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    white-space: nowrap;
+    color: #4caf50;
+}
+
