@@ -1,0 +1,10 @@
+/* src/components/ManagementWithWelcomePage.css */
+.management-with-welcome-container {
+    display: flex;
+}
+
+.management-page,
+.welcome-page {
+    flex: 1;
+    padding: 10px;
+}

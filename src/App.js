@@ -1,3 +1,4 @@
+//src\App.js
 import React, { useContext } from "react";
 import { AuthContext } from "./contexts/AuthContext";
 import { Route, Link, Routes } from "react-router-dom";
@@ -5,6 +6,7 @@ import LoginPage from "./components/LoginPage";
 import WelcomePage from "./components/WelcomePage";
 import GradePage from "./components/GradePage";
 import ManagementPage from "./components/ManagementPage";
+import ManagementWithWelcomePage from './components/ManagementWithWelcomePage';
 import "./App.css";
 import { AuthProvider } from "./contexts/AuthContext";
 
@@ -38,7 +40,7 @@ const Content = () => (
       <Route path="/" element={<LoginPage />} />
       <Route path="/welcome" element={<WelcomePage />} />
       <Route path="/grade" element={<GradePage />} />
-      <Route path="/management" element={<ManagementPage />} />
+      <Route path="/management" element={<ManagementWithWelcomePage />} />
     </Routes>
   </div>
 );
