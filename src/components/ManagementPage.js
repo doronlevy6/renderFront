@@ -59,7 +59,7 @@ function ManagementPage() {
           });
         }
       } else {
-        await axios.post("http://renderbbserver.onrender.com/delete-enlist", {
+        await axios.post("https://renderbbserver.onrender.com/delete-enlist", {
           isTierMethod,
         });
       }
@@ -91,12 +91,12 @@ function ManagementPage() {
     const fetchData = async () => {
       try {
         const usernamesResponse = await axios.get(
-          "http://renderbbserver.onrender.com/usernames"
+          "https://renderbbserver.onrender.com/usernames"
         );
         if (usernamesResponse.data.success) {
           setUsernames(usernamesResponse.data.usernames);
         }
-        const enlistedResponse = await axios.get("http://renderbbserver.onrender.com/enlist");
+        const enlistedResponse = await axios.get("https://renderbbserver.onrender.com/enlist");
         if (enlistedResponse.data.success) {
           setEnlistedUsernames(enlistedResponse.data.usernames);
         }
