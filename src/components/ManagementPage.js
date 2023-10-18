@@ -14,6 +14,7 @@ function ManagementPage() {
 
   // New state variable for checkbox
   const [isTierMethod, setIsTierMethod] = useState(false);
+  const apiUrl = process.env.REACT_APP_API_URL
 
   const handleCheckboxChange = (e, username) => {
     if (e.target.checked) {
@@ -45,7 +46,7 @@ function ManagementPage() {
       // Enlist usernames from selectedUsernames
       if (selectedUsernames.length > 0 || (unselectedUsernames.length > 0)) {
         if (selectedUsernames.length > 0) {
-          await axios.post("https://renderbbserver.onrender.com/enlist-users", {
+          await axios.post(`${apiUrl}/enlist-users`, {
             usernames: selectedUsernames,
             isTierMethod, // Include the method selection in payload
           });
@@ -53,13 +54,13 @@ function ManagementPage() {
 
         // Unenlist usernames from unselectedUsernames
         if (unselectedUsernames.length > 0) {
-          await axios.post("https://renderbbserver.onrender.com/delete-enlist", {
+          await axios.post(`${apiUrl}/delete-enlist`, {
             usernames: unselectedUsernames,
             isTierMethod,
           });
         }
       } else {
-        await axios.post("https://renderbbserver.onrender.com/delete-enlist", {
+        await axios.post(`${apiUrl}/delete-enlist`, {
           isTierMethod,
         });
       }
@@ -91,12 +92,12 @@ function ManagementPage() {
     const fetchData = async () => {
       try {
         const usernamesResponse = await axios.get(
-          "https://renderbbserver.onrender.com/usernames"
+          `${apiUrl}/usernames`
         );
         if (usernamesResponse.data.success) {
           setUsernames(usernamesResponse.data.usernames);
         }
-        const enlistedResponse = await axios.get("https://renderbbserver.onrender.com/enlist");
+        const enlistedResponse = await axios.get(`${apiUrl}/enlist`);
         if (enlistedResponse.data.success) {
           setEnlistedUsernames(enlistedResponse.data.usernames);
         }

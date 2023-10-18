@@ -14,28 +14,24 @@ function LoginPage() {
   const [isRegister, setIsRegister] = useState(false);
   const { setIsAuthenticated, setUser } = useContext(AuthContext);
   const [errorMessage, setErrorMessage] = useState("");
-
+  const apiUrl = process.env.REACT_APP_API_URL
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(
-        "https://renderbbserver.onrender.com/register",
-        {
-          username,
-          password,
-          email,
-        }
-      );
+      const response = await axios.post(`${apiUrl}/register`, {
+        username,
+        password,
+        email,
+      });
 
       if (response.data.success) {
-        const loginResponse = await axios.post(
-          "https://renderbbserver.onrender.com/login",
-          {
-            username,
-            password,
-          }
-        );
-        console.log("\n loginResponse", loginResponse, "\n");
+
+
+        const loginResponse = await axios.post(`${apiUrl}/login`, {
+          username,
+          password,
+        });
+
 
         if (loginResponse.data.success) {
           setIsAuthenticated(true);
@@ -58,20 +54,14 @@ function LoginPage() {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(
-        "https://renderbbserver.onrender.com/login",
-        {
-          username,
-          password,
-        }
-      );
+      const response = await axios.post(`${apiUrl}/login`, {
+        username,
+        password,
+      });
 
       if (response.data.success) {
         setIsAuthenticated(true);
         setUser(response.data.user);
-
-        console.log("\n response.data", response.data, "\n");
-
         navigate("/welcome");
       } else {
         setErrorMessage(response.data.message);

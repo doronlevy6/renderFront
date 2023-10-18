@@ -11,7 +11,7 @@ function ManagementWithWelcomePage() {
                 <ManagementPage />
             </div>
             < div className="welcome-page" >
-                <WelcomePage />
+                <WelcomePage showOnlyTeams={true} />
             </div>
         </div>
     );

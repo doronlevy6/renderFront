@@ -7,21 +7,22 @@ import { useNavigate } from "react-router-dom";
 import "./WelcomePage.css";
 import io from "socket.io-client";
 
-function WelcomePage() {
+function WelcomePage({ showOnlyTeams }) {
   const { isAuthenticated, user } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const [teams, setTeams] = useState([]);
   const [enlistedPlayers, setEnlistedPlayers] = useState([]);
+  const apiUrl = process.env.REACT_APP_API_URL
 
   const fetchData = async () => {
     try {
-      const enlistResponse = await axios.get("https://renderbbserver.onrender.com/enlist");
+      const enlistResponse = await axios.get(`${apiUrl}/enlist`);
       if (enlistResponse.data.success) {
         setEnlistedPlayers(enlistResponse.data.usernames);
       }
 
-      const teamsResponse = await axios.get("https://renderbbserver.onrender.com/get-teams");
+      const teamsResponse = await axios.get(`${apiUrl}/get-teams`);
 
       if (teamsResponse.data.success) {
         setTeams(teamsResponse.data.teams);
@@ -43,7 +44,7 @@ function WelcomePage() {
   const enlistForGame = async () => {
     try {
       const usernames = [user.username];
-      const response = await axios.post("https://renderbbserver.onrender.com/enlist-users", {
+      const response = await axios.post(`${apiUrl}/enlist-users`, {
         usernames: usernames,
       });
       if (response.data.success) {
@@ -56,7 +57,7 @@ function WelcomePage() {
     }
   };
   useEffect(() => {
-    const socket = io("https://renderbbserver.onrender.com");
+    const socket = io(`${apiUrl}`);
 
     socket.on("teamsUpdated", () => {
       fetchData();
@@ -67,22 +68,25 @@ function WelcomePage() {
 
   return (
     <div className="welcome-page">
-      <button onClick={enlistForGame}>Enlist for Next Game</button>
+      {!showOnlyTeams && (
+        <>
+          <button onClick={enlistForGame}>Enlist for Next Game</button>
 
-      <div className="welcome-section">
-        <h2>Enlisted Players</h2>
-        <div className="usernames-list">
-          {enlistedPlayers.map((username, index) => (
-            <div key={index} className="team-averages">
-              {username}
+          <div className="welcome-section">
+            <h2>Enlisted Players</h2>
+            <div className="usernames-list">
+              {enlistedPlayers.map((username, index) => (
+                <div key={index} className="team-averages">
+                  {username}
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-        <div className="team-averages">
-          Players: {enlistedPlayers.length}
-        </div>
-      </div>
-
+            <div className="team-averages">
+              Players: {enlistedPlayers.length}
+            </div>
+          </div>
+        </>
+      )}
       <div className="welcome-section">
         <h2>Teams and Averages</h2>
         {Array.isArray(teams) && teams.length > 0 ? (
