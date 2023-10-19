@@ -1,10 +1,19 @@
-/* src/components/ManagementWithWelcomePage.css */
 .management-with-welcome-container {
     display: flex;
 }
 
 .management-page,
 .welcome-page {
-    flex: 1;
-    padding: 10px;
+
+    flex-shrink: 0;
+    padding: 0;
+    /* Remove padding so that there's no gap */
+    box-sizing: border-box;
+    border-right: 1px solid #ddd;
+    /* Optional: if you want a divider between them */
+}
+
+/* Remove the border for the last child so there's no double border on the right */
+.management-with-welcome-container>div:last-child {
+    border-right: none;
 }

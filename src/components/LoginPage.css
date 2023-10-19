@@ -4,16 +4,16 @@
   align-items: center;
   justify-content: center;
   height: 100vh;
-  background-image: url("b.webp"); /* Replace "transparent-basketball.png" with the path to your transparent basketball image */
+  background-image: url("bb3d.png");
+  /* Replace "transparent-basketball.png" with the path to your transparent basketball image */
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
-  background-color: rgba(
-    0,
-    0,
-    0,
-    0.2
-  ); /* Adjust the background color and opacity as desired */
+  background-color: rgba(0,
+      0,
+      0,
+      0.2);
+  /* Adjust the background color and opacity as desired */
 }
 
 .login-form {
@@ -23,7 +23,8 @@
   justify-content: center;
   width: 300px;
   padding: 20px;
-  background-color:rgba(255, 165, 0,0); /* White form background */
+  background-color: rgba(255, 165, 0, 0);
+  /* White form background */
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -43,18 +44,24 @@
   margin-top: 10px;
   border: none;
   border-radius: 4px;
-  background-color: #4caf50; /* Green button background */
-  color: #ffffff; /* White button text color */
+  background-color: #4caf50;
+  /* Green button background */
+  color: #ffffff;
+  /* White button text color */
   cursor: pointer;
 }
 
 .submit-button:hover {
-  background-color: #45a049; /* Darker green on button hover */
+  background-color: #45a049;
+  /* Darker green on button hover */
 }
+
 .login-page h2,
 .login-page p {
-  color: #4caf50; /* Adjust as needed */
-  text-align: center; /* Center align text */
+  color: #4caf50;
+  /* Adjust as needed */
+  text-align: center;
+  /* Center align text */
 }
 
 /* For the button that switches between register and login */
@@ -63,19 +70,25 @@
   padding: 10px;
   border: none;
   border-radius: 4px;
-  background-color: #4caf50; /* Green button background */
-  color: #ffffff; /* White button text color */
+  background-color: #4caf50;
+  /* Green button background */
+  color: #ffffff;
+  /* White button text color */
   cursor: pointer;
 }
 
 .login-page button:hover {
-  background-color: #45a049; /* Darker green on button hover */
+  background-color: #45a049;
+  /* Darker green on button hover */
 }
 
 /* For the error message */
 .login-page p {
-  color: red; /* Red error text */
+  color: red;
+  /* Red error text */
   margin-bottom: 20px;
-  font-weight: bold; /* Make the text bold */
-  text-shadow: 2px 2px 2px white; /* Add a white shadow with 2px horizontal offset, 2px vertical offset, and 2px blur radius */
+  font-weight: bold;
+  /* Make the text bold */
+  text-shadow: 2px 2px 2px white;
+  /* Add a white shadow with 2px horizontal offset, 2px vertical offset, and 2px blur radius */
 }
