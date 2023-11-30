@@ -18,7 +18,7 @@ function LoginPage() {
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`${apiUrl}/register1`, {
+      const response = await axios.post(`${apiUrl}/register`, {
         username,
         password,
         email,
