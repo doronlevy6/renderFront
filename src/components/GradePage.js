@@ -1,32 +1,28 @@
 //src\components\GradePage.js:
 
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { AuthContext } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { Button, Container, Table, Row, Col, Form } from "react-bootstrap";
 import "./GradePage.css";
 
 function GradePage() {
-  const { isAuthenticated, user } = useContext(AuthContext);
   const navigate = useNavigate();
   const [grading, setGrading] = useState([]);
-  const apiUrl = process.env.REACT_APP_API_URL
-
+  const apiUrl = process.env.REACT_APP_API_URL;
+  const user = localStorage.getItem("user");
 
   useEffect(() => {
-    if (!isAuthenticated) {
+    if (0) {
       navigate("/");
     } else {
       const fetchRankings = async () => {
         try {
           // Fetch all usernames
-          const usernamesResponse = await axios.get(
-            `${apiUrl}/usernames`
-          );
+          const usernamesResponse = await axios.get(`${apiUrl}/usernames`);
           // Fetch all rankings given by the logged-in user
           const rankingsResponse = await axios.get(
-            `${apiUrl}/rankings/${user.username}`
+            `${apiUrl}/rankings/${user}`
           );
 
           if (usernamesResponse.data.success && rankingsResponse.data.success) {
@@ -38,12 +34,17 @@ function GradePage() {
 
             // Prepare the initial grading data, considering all the usernames
             const initialGrading = usernamesResponse.data.usernames
-              .filter(username => {
+              .filter((username) => {
                 // Only "doron" can see players starting with "joker"
-                if (username.startsWith("joker") && user.username !== "doron") return false;
+                if (username.startsWith("joker") && user.username !== "doron")
+                  return false;
 
                 // If the current user is "doron" or "moshe", they can rank themselves
-                if ((username === "doron" || username === "Moshe") && user.username === username) return true;
+                if (
+                  (username === "doron" || username === "Moshe") &&
+                  user.username === username
+                )
+                  return true;
 
                 // Other users cannot rank themselves
                 if (username === user.username) return false;
@@ -75,8 +76,6 @@ function GradePage() {
                 }
               });
 
-
-
             setGrading(initialGrading);
           }
         } catch (error) {
@@ -86,14 +85,12 @@ function GradePage() {
 
       fetchRankings();
     }
-  }, [isAuthenticated, navigate, user]);
+  }, [navigate, user]);
 
   const submitGrading = async () => {
     try {
-
-
       const response = await axios.post(`${apiUrl}/rankings`, {
-        rater_username: user.username,
+        rater_username: user,
         rankings: grading,
       });
       if (response.data.success) {
@@ -111,9 +108,9 @@ function GradePage() {
       prevGrading.map((gradingPlayer) =>
         gradingPlayer.username === playerUsername
           ? {
-            ...gradingPlayer,
-            [category]: Number(event.target.value),
-          }
+              ...gradingPlayer,
+              [category]: Number(event.target.value),
+            }
           : gradingPlayer
       )
     );
@@ -124,10 +121,11 @@ function GradePage() {
       <Row className="justify-content-md-center">
         <Col xs lg="12">
           <div className="grade-form">
-            <h2> {user.username}  🏀 your grades are shown here 🏀</h2>
-            <p>Enter a number between 1 and 10 or use the arrow keys.
-
-              Only players with a valid grade will be submitted</p>
+            <h2> {user.username} 🏀 your grades are shown here 🏀</h2>
+            <p>
+              Enter a number between 1 and 10 or use the arrow keys. Only
+              players with a valid grade will be submitted
+            </p>
             <Table striped bordered hover>
               <thead>
                 <tr>
@@ -151,7 +149,10 @@ function GradePage() {
                         max="10"
                         value={player.skillLevel || ""}
                         placeholder="🙄"
-                        onChange={handleInputChange(player.username, "skillLevel")}
+                        onChange={handleInputChange(
+                          player.username,
+                          "skillLevel"
+                        )}
                       />
                     </td>
                     <td>
@@ -161,7 +162,10 @@ function GradePage() {
                         max="10"
                         value={player.scoringAbility || ""}
                         placeholder="🙄"
-                        onChange={handleInputChange(player.username, "scoringAbility")}
+                        onChange={handleInputChange(
+                          player.username,
+                          "scoringAbility"
+                        )}
                       />
                     </td>
                     <td>
@@ -171,7 +175,10 @@ function GradePage() {
                         max="10"
                         value={player.defensiveSkills || ""}
                         placeholder="🙄"
-                        onChange={handleInputChange(player.username, "defensiveSkills")}
+                        onChange={handleInputChange(
+                          player.username,
+                          "defensiveSkills"
+                        )}
                       />
                     </td>
                     <td>
@@ -181,7 +188,10 @@ function GradePage() {
                         max="10"
                         value={player.speedAndAgility || ""}
                         placeholder="🙄"
-                        onChange={handleInputChange(player.username, "speedAndAgility")}
+                        onChange={handleInputChange(
+                          player.username,
+                          "speedAndAgility"
+                        )}
                       />
                     </td>
                     <td>
@@ -191,7 +201,10 @@ function GradePage() {
                         max="10"
                         value={player.shootingRange || ""}
                         placeholder="🙄"
-                        onChange={handleInputChange(player.username, "shootingRange")}
+                        onChange={handleInputChange(
+                          player.username,
+                          "shootingRange"
+                        )}
                       />
                     </td>
                     <td>
@@ -201,7 +214,10 @@ function GradePage() {
                         max="10"
                         value={player.reboundSkills || ""}
                         placeholder="🙄"
-                        onChange={handleInputChange(player.username, "reboundSkills")}
+                        onChange={handleInputChange(
+                          player.username,
+                          "reboundSkills"
+                        )}
                       />
                     </td>
                   </tr>
@@ -222,15 +238,33 @@ function GradePage() {
             Submit
           </Button>
           <div className="mt-3">
-            <p><strong>רכז (playmaker):</strong> ניהול משחק-שחקן שטוב ביצירת הזדמנויות קליעה לעצמו או לחבריו לקבוצה, לרוב באמצעות כדרור או מסירה.</p>
-            <p><strong>יכולת קליעה (scoring ability):</strong> היכולת לקלוע סל באופן כללי מכל עמדות על המגרש, באמצעות מגוון של תנועות התקפיות.</p>
-            <p><strong>מיומנויות הגנה (defensive skills):</strong> היכולת למנוע מהיריב לקלוע, באמצעות טכניקות כגון חסימת זריקות, חטיפה של הכדור, ועמידה טובה במקום.</p>
-            <p><strong>מהירות וזריזות (speed and agility):</strong> היכולת לנוע מהר ולשנות כיוון בקלות, דבר המסייע גם במצבים ההתקפיים וגם במצבים ההגנתיים.</p>
-            <p><strong>קליעה לשלוש (3 pt shooting):</strong> היכולת לקלוע מעבר לקשת השלוש.</p>
-            <p><strong>ריבאונד (rebound skills):</strong> היכולת לקחת ריבאונד בהתקפה ובהגנה.</p>
+            <p>
+              <strong>רכז (playmaker):</strong> שחקן שטוב ביצירת הזדמנויות קליעה
+              לעצמו או לחבריו לקבוצה, לרוב באמצעות מסירה או כדרור.
+            </p>
+            <p>
+              <strong>יכולת קליעה (scoring ability):</strong> היכולת לקלוע סל
+              באופן כללי מכל עמדות על המגרש, באמצעות מגוון של תנועות התקפיות.
+            </p>
+            <p>
+              <strong>מיומנויות הגנה (defensive skills):</strong> היכולת למנוע
+              מהיריב לקלוע, באמצעות טכניקות כגון חסימת זריקות, חטיפה של הכדור,
+              ועמידה טובה במקום.
+            </p>
+            <p>
+              <strong>מהירות וזריזות (speed and agility):</strong> היכולת לנוע
+              מהר ולשנות כיוון בקלות, דבר המסייע גם במצבים ההתקפיים וגם במצבים
+              ההגנתיים.
+            </p>
+            <p>
+              <strong>קליעה לשלוש (3 pt shooting):</strong> היכולת לקלוע מעבר
+              לקשת השלוש.
+            </p>
+            <p>
+              <strong>ריבאונד (rebound skills):</strong> היכולת לקחת ריבאונד
+              בהתקפה ובהגנה.
+            </p>
           </div>
-
-
         </Col>
       </Row>
     </Container>

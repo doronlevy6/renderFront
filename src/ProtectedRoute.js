@@ -1,15 +1,15 @@
-import { Route, Navigate } from 'react-router-dom';
-import { AuthContext } from './contexts/AuthContext';
-import React from 'react';
+import React from "react";
+import { Navigate } from "react-router-dom";
 
-function ProtectedRoute({ element, ...rest }) {
-  const { isAuthenticated } = React.useContext(AuthContext);
+const ProtectedRoute = ({ children }) => {
+  const user = localStorage.getItem("user");
 
-  return isAuthenticated ? (
-    <Route element={element} {...rest} />
-  ) : (
-    <Navigate to='/' />
-  );
-}
+  if (!user) {
+    // Redirect to the login page if no user data in localStorage
+    return <Navigate to="/" />;
+  }
+
+  return children; // Render the children components if user data exists
+};
 
 export default ProtectedRoute;

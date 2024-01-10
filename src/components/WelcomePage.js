@@ -1,19 +1,17 @@
 //src\components\WelcomePage.js:
 
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { AuthContext } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import "./WelcomePage.css";
 import io from "socket.io-client";
 
 function WelcomePage({ showOnlyTeams }) {
-  const { isAuthenticated, user } = useContext(AuthContext);
   const navigate = useNavigate();
-
   const [teams, setTeams] = useState([]);
   const [enlistedPlayers, setEnlistedPlayers] = useState([]);
   const apiUrl = process.env.REACT_APP_API_URL;
+  const user = localStorage.getItem("user");
 
   const fetchData = async () => {
     try {
@@ -33,16 +31,12 @@ function WelcomePage({ showOnlyTeams }) {
   };
 
   useEffect(() => {
-    if (!isAuthenticated) {
-      navigate("/");
-    } else {
-      fetchData();
-    }
-  }, [isAuthenticated, navigate, user]);
+    fetchData();
+  }, [navigate, user]);
 
   const enlistForGame = async () => {
     try {
-      const usernames = [user.username];
+      const usernames = [user];
       const response = await axios.post(`${apiUrl}/enlist-users`, {
         usernames: usernames,
       });
@@ -69,7 +63,7 @@ function WelcomePage({ showOnlyTeams }) {
     <div className="welcome-page">
       {!showOnlyTeams && (
         <>
-          <button onClick={enlistForGame}> * Enlist for Next Game</button>
+          <button onClick={enlistForGame}>Enlist for Next Game</button>
 
           <div className="welcome-section">
             <h2>Enlisted Players</h2>

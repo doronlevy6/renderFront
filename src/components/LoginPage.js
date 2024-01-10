@@ -1,10 +1,9 @@
 //src\components\LoginPage.js:
 
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./LoginPage.css";
-import { AuthContext } from "../contexts/AuthContext";
 
 function LoginPage() {
   const [username, setUsername] = useState("");
@@ -12,9 +11,9 @@ function LoginPage() {
   const [email, setEmail] = useState("");
   const navigate = useNavigate();
   const [isRegister, setIsRegister] = useState(false);
-  const { setIsAuthenticated, setUser } = useContext(AuthContext);
   const [errorMessage, setErrorMessage] = useState("");
-  const apiUrl = process.env.REACT_APP_API_URL
+  const apiUrl = process.env.REACT_APP_API_URL;
+
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
@@ -23,19 +22,15 @@ function LoginPage() {
         password,
         email,
       });
-
+      console.log("respons", response);
       if (response.data.success) {
-
-
         const loginResponse = await axios.post(`${apiUrl}/login`, {
           username,
           password,
         });
 
-
         if (loginResponse.data.success) {
-          setIsAuthenticated(true);
-          setUser(loginResponse.data.user);
+          localStorage.setItem("user", loginResponse.data.user);
           navigate("/welcome");
         } else {
           setErrorMessage(loginResponse.data.message);
@@ -60,8 +55,10 @@ function LoginPage() {
       });
 
       if (response.data.success) {
-        setIsAuthenticated(true);
-        setUser(response.data.user);
+        // setIsAuthenticated(true);
+        // setUser(response.data.user);
+        localStorage.setItem("token", response.data.token);
+        localStorage.setItem("user", response.data.user.username);
         navigate("/welcome");
       } else {
         setErrorMessage(response.data.message);
@@ -120,7 +117,7 @@ function LoginPage() {
             />
             <input
               className="input-field"
-              type="email"
+              type="text"
               placeholder="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}

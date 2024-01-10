@@ -1,17 +1,24 @@
 //src\App.js
-import React, { useContext } from "react";
-import { AuthContext } from "./contexts/AuthContext";
+import React, { useState } from "react";
 import { Route, Link, Routes } from "react-router-dom";
 import LoginPage from "./components/LoginPage";
 import WelcomePage from "./components/WelcomePage";
 import GradePage from "./components/GradePage";
 import ManagementPage from "./components/ManagementPage";
-import ManagementWithWelcomePage from './components/ManagementWithWelcomePage';
+import ManagementWithWelcomePage from "./components/ManagementWithWelcomePage";
 import "./App.css";
-import { AuthProvider } from "./contexts/AuthContext";
+import lookup from "socket.io-client";
+import { useNavigate } from "react-router-dom";
+import ProtectedRoute from "./ProtectedRoute";
 
 const Sidebar = () => {
-  const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const user = localStorage.getItem("user");
+
+  const handleLogout = () => {
+    localStorage.clear(); // This will clear the entire localStorage, including tokens
+    navigate("/"); // Redirects to the login page
+  };
 
   return (
     <div className="sidebar">
@@ -25,11 +32,14 @@ const Sidebar = () => {
         <li>
           <Link to="/grade">Grade Page</Link>
         </li>
-        {user && user.username === "doron" && (
+        {user === "doron" && (
           <li>
             <Link to="/management">Management Page</Link>
           </li>
         )}
+        <li>
+          <button onClick={handleLogout}>Logout</button>
+        </li>
       </ul>
     </div>
   );
@@ -38,21 +48,41 @@ const Content = () => (
   <div className="content">
     <Routes>
       <Route path="/" element={<LoginPage />} />
-      <Route path="/welcome" element={<WelcomePage />} />
-      <Route path="/grade" element={<GradePage />} />
-      <Route path="/management" element={<ManagementWithWelcomePage />} />
+
+      <Route
+        path="/welcome"
+        element={
+          <ProtectedRoute>
+            <WelcomePage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/grade"
+        element={
+          <ProtectedRoute>
+            <GradePage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/management"
+        element={
+          <ProtectedRoute>
+            <ManagementWithWelcomePage />
+          </ProtectedRoute>
+        }
+      />
     </Routes>
   </div>
 );
 
 function App() {
   return (
-    <AuthProvider>
-      <div className="app-layout">
-        <Sidebar />
-        <Content />
-      </div>
-    </AuthProvider>
+    <div className="app-layout">
+      <Sidebar />
+      <Content />
+    </div>
   );
 }
 

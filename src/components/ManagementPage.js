@@ -1,12 +1,12 @@
 //src\components\ManagementPage.js:
 
-import React, { useContext, useEffect, useState } from "react";
-import { AuthContext } from "../contexts/AuthContext";
+import React, { useEffect, useState } from "react";
+// import { AuthContext } from "../contexts/AuthContext";
 import axios from "axios";
 import "./WelcomePage.css";
 
 function ManagementPage() {
-  const { isAuthenticated, user } = useContext(AuthContext);
+  // const { isAuthenticated, user } = useContext(AuthContext);
   const [usernames, setUsernames] = useState([]);
   const [enlistedUsernames, setEnlistedUsernames] = useState([]);
   const [selectedUsernames, setSelectedUsernames] = useState([]);
@@ -14,42 +14,53 @@ function ManagementPage() {
 
   // New state variable for checkbox
   const [isTierMethod, setIsTierMethod] = useState(false);
-  const apiUrl = process.env.REACT_APP_API_URL
-
+  const apiUrl = process.env.REACT_APP_API_URL;
+  const user = localStorage.getItem("user");
   const handleCheckboxChange = (e, username) => {
     if (e.target.checked) {
-
-
       // Remove from unselectedUsernames if it's there
       if (unselectedUsernames.includes(username)) {
-        setUnselectedUsernames(prev => prev.filter(u => u !== username));
+        setUnselectedUsernames((prev) => prev.filter((u) => u !== username));
       }
       // Add to selected usernames
-      if (!selectedUsernames.includes(username) && !enlistedUsernames.includes(username)) {
+      if (
+        !selectedUsernames.includes(username) &&
+        !enlistedUsernames.includes(username)
+      ) {
         setSelectedUsernames([...selectedUsernames, username]);
       }
     } else {
       // Remove from selectedUsernames if it's there
       if (selectedUsernames.includes(username)) {
-        setSelectedUsernames(prev => prev.filter(u => u !== username));
+        setSelectedUsernames((prev) => prev.filter((u) => u !== username));
       }
       // Add to unselectedUsernames if it was already enlisted
-      if (enlistedUsernames.includes(username) && !unselectedUsernames.includes(username)) {
+      if (
+        enlistedUsernames.includes(username) &&
+        !unselectedUsernames.includes(username)
+      ) {
         setUnselectedUsernames([...unselectedUsernames, username]);
       }
     }
   };
 
-
   const handleEnlistUsers = async () => {
     try {
       // Enlist usernames from selectedUsernames
-      if (selectedUsernames.length > 0 || (unselectedUsernames.length > 0)) {
+      if (selectedUsernames.length > 0 || unselectedUsernames.length > 0) {
         if (selectedUsernames.length > 0) {
-          await axios.post(`${apiUrl}/enlist-users`, {
-            usernames: selectedUsernames,
-            isTierMethod, // Include the method selection in payload
-          });
+          await axios.post(
+            `${apiUrl}/enlist-users`,
+            {
+              usernames: selectedUsernames,
+              isTierMethod, // Include the method selection in payload
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+              },
+            }
+          );
         }
 
         // Unenlist usernames from unselectedUsernames
@@ -68,22 +79,21 @@ function ManagementPage() {
       alert("Users updated successfully!");
 
       // Update local state to reflect the changes
-      setEnlistedUsernames(prevState => [
-        ...prevState.filter(username => !unselectedUsernames.includes(username)),
-        ...selectedUsernames
+      setEnlistedUsernames((prevState) => [
+        ...prevState.filter(
+          (username) => !unselectedUsernames.includes(username)
+        ),
+        ...selectedUsernames,
       ]);
       setSelectedUsernames([]);
       setUnselectedUsernames([]);
-
     } catch (error) {
       console.error(error);
     }
   };
 
-
-
   useEffect(() => {
-    if (!isAuthenticated || user.username !== "doron") {
+    if (user !== "doron") {
       alert("Access Denied!");
       // Redirect or do something to handle unauthorized access.
       return;
@@ -91,9 +101,7 @@ function ManagementPage() {
 
     const fetchData = async () => {
       try {
-        const usernamesResponse = await axios.get(
-          `${apiUrl}/usernames`
-        );
+        const usernamesResponse = await axios.get(`${apiUrl}/usernames`);
         if (usernamesResponse.data.success) {
           setUsernames(usernamesResponse.data.usernames);
         }
@@ -101,18 +109,18 @@ function ManagementPage() {
         if (enlistedResponse.data.success) {
           setEnlistedUsernames(enlistedResponse.data.usernames);
         }
-
       } catch (error) {
         console.error(error);
       }
     };
 
     fetchData();
-  }, [isAuthenticated, user]);
+  }, [user]);
 
-  const currentPlayingCount = enlistedUsernames.length
-    - unselectedUsernames.length
-    + selectedUsernames.length;
+  const currentPlayingCount =
+    enlistedUsernames.length -
+    unselectedUsernames.length +
+    selectedUsernames.length;
 
   return (
     <div className="welcome-page">
@@ -134,7 +142,11 @@ function ManagementPage() {
             <div key={username} className="team-averages">
               <input
                 type="checkbox"
-                checked={(selectedUsernames.includes(username) || enlistedUsernames.includes(username)) && !unselectedUsernames.includes(username)}
+                checked={
+                  (selectedUsernames.includes(username) ||
+                    enlistedUsernames.includes(username)) &&
+                  !unselectedUsernames.includes(username)
+                }
                 onChange={(e) => handleCheckboxChange(e, username)}
               />
               {username}
@@ -144,7 +156,6 @@ function ManagementPage() {
       </div>
     </div>
   );
-
 }
 
 export default ManagementPage;
