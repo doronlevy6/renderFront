@@ -1,0 +1,15 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Launch Chrome against localhost",
+            "type": "pwa-chrome",
+            "request": "launch",
+            "url": "http://localhost:4000",
+            "webRoot": "${workspaceFolder}/src",
+            "sourceMaps": true,
+            "skipFiles": ["<node_internals>/**"],
+            "trace": true
+        }
+    ]
+}
